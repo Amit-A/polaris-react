@@ -73,11 +73,14 @@ export class DataTable extends React.PureComponent<
       table: {current: table},
       scrollContainer: {current: scrollContainer},
     } = this;
+
     let collapsed = false;
+
     if (table && scrollContainer) {
       collapsed = table.scrollWidth > scrollContainer.clientWidth;
       scrollContainer.scrollLeft = 0;
     }
+
     this.setState(
       {
         collapsed,
@@ -252,8 +255,8 @@ export class DataTable extends React.PureComponent<
 
       if (!truncate) {
         return (heights = rows.map((row) => {
-          const fixedCell = (row.childNodes as NodeListOf<HTMLElement>)[0];
-          return Math.max(row.clientHeight, fixedCell.clientHeight);
+          const firstCell = (row.childNodes as NodeListOf<HTMLElement>)[0];
+          return Math.max(row.clientHeight, firstCell.clientHeight);
         }));
       }
 
@@ -268,16 +271,15 @@ export class DataTable extends React.PureComponent<
   };
 
   private resetScrollPosition = () => {
-    const {
-      scrollContainer: {current: scrollContainer},
-    } = this;
+    const {current: scrollContainer} = this.scrollContainer;
+
     if (scrollContainer) {
-      const {
-        preservedScrollPosition: {left, top},
-      } = this.state;
+      const {left, top} = this.state.preservedScrollPosition;
+
       if (left) {
         scrollContainer.scrollLeft = left;
       }
+
       if (top) {
         window.scrollTo(0, top);
       }
@@ -297,35 +299,34 @@ export class DataTable extends React.PureComponent<
       scrollContainer: {current: scrollContainer},
       dataTable: {current: dataTable},
     } = this;
+
     if (collapsed && table && scrollContainer && dataTable) {
       const headerCells = table.querySelectorAll(
         headerCell.selector,
       ) as NodeListOf<HTMLElement>;
-      const collapsedHeaderCells = Array.from(headerCells).slice(1);
-      const fixedColumnWidth = headerCells[0].offsetWidth;
-      const firstVisibleColumnIndex = collapsedHeaderCells.length - 1;
-      const tableLeftVisibleEdge =
-        scrollContainer.scrollLeft + fixedColumnWidth;
+
+      const firstVisibleColumnIndex = headerCells.length - 1;
+      const tableLeftVisibleEdge = scrollContainer.scrollLeft;
+
       const tableRightVisibleEdge =
         scrollContainer.scrollLeft + dataTable.offsetWidth;
+
       const tableData = {
-        fixedColumnWidth,
         firstVisibleColumnIndex,
         tableLeftVisibleEdge,
         tableRightVisibleEdge,
       };
 
-      const columnVisibilityData = collapsedHeaderCells.map(
+      const columnVisibilityData = Array.from(headerCells).map(
         measureColumn(tableData),
       );
 
       const lastColumn = columnVisibilityData[columnVisibilityData.length - 1];
 
       return {
-        fixedColumnWidth,
         columnVisibilityData,
         ...getPrevAndCurrentColumns(tableData, columnVisibilityData),
-        isScrolledFarthestLeft: tableLeftVisibleEdge === fixedColumnWidth,
+        isScrolledFarthestLeft: tableLeftVisibleEdge === 0,
         isScrolledFarthestRight: lastColumn.rightEdge <= tableRightVisibleEdge,
       };
     }
@@ -344,21 +345,19 @@ export class DataTable extends React.PureComponent<
   };
 
   private navigateTable = (direction: string) => {
-    const {currentColumn, previousColumn, fixedColumnWidth} = this.state;
-    const {
-      scrollContainer: {current: scrollContainer},
-    } = this;
+    const {currentColumn, previousColumn} = this.state;
+    const {current: scrollContainer} = this.scrollContainer;
 
     const handleScroll = () => {
-      if (!currentColumn || !previousColumn || !fixedColumnWidth) {
+      if (!currentColumn || !previousColumn) {
         return;
       }
 
       if (scrollContainer) {
         scrollContainer.scrollLeft =
           direction === 'right'
-            ? currentColumn.rightEdge - fixedColumnWidth
-            : previousColumn.leftEdge - fixedColumnWidth;
+            ? currentColumn.rightEdge
+            : previousColumn.leftEdge;
 
         requestAnimationFrame(() => {
           this.setState((prevState) => ({
