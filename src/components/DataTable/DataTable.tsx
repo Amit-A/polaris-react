@@ -192,7 +192,7 @@ export class DataTable extends React.PureComponent<
               height={height}
               content={heading}
               contentType={columnContentTypes[headingIndex]}
-              fixed={headingIndex === 0}
+              firstColumn={headingIndex === 0}
               truncate={truncate}
               {...sortableHeadingProps}
             />
@@ -391,7 +391,7 @@ export class DataTable extends React.PureComponent<
     return (
       <Cell
         total
-        fixed={index === 0}
+        firstColumn={index === 0}
         testID={id}
         key={id}
         height={heights[1]}
@@ -429,7 +429,7 @@ export class DataTable extends React.PureComponent<
               height={bodyCellHeights[index]}
               content={content}
               contentType={columnContentTypes[cellIndex]}
-              fixed={cellIndex === 0}
+              firstColumn={cellIndex === 0}
               truncate={truncate}
             />
           );
