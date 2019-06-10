@@ -1,7 +1,8 @@
 import * as React from 'react';
-
 import {classNames} from '@shopify/css-utilities';
 import {ExternalSmallMinor} from '@shopify/polaris-icons';
+
+import {contentContextTypes} from '../../types';
 
 import {withAppProvider, WithAppProviderProps} from '../AppProvider';
 import UnstyledLink from '../UnstyledLink';
@@ -27,16 +28,17 @@ export interface BaseProps {
 export interface Props extends BaseProps {}
 type CombinedProps = Props & WithAppProviderProps;
 
-function Link({
-  url,
-  children,
-  onClick,
-  external,
-  id,
-  monochrome,
-  polaris,
-}: CombinedProps) {
-  const className = classNames(styles.Link, monochrome && styles.monochrome);
+function Link(
+  {url, children, onClick, external, id, monochrome, polaris}: CombinedProps,
+  context: {withinBanner: boolean},
+) {
+  const shouldBeMonochrome = monochrome || context.withinBanner;
+
+  const className = classNames(
+    styles.Link,
+    shouldBeMonochrome && styles.monochrome,
+  );
+
   let childrenMarkup = children;
 
   if (external && typeof children === 'string') {
@@ -73,5 +75,7 @@ function Link({
     </button>
   );
 }
+
+Link.contextTypes = contentContextTypes;
 
 export default withAppProvider<Props>()(Link);

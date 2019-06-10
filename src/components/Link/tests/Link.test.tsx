@@ -81,4 +81,56 @@ describe('<Link />', () => {
       expect(link.find(Icon).exists()).toBe(false);
     });
   });
+
+  describe('monochrome link', () => {
+    it('outputs a monochrome unstyled link if rendered within a banner', () => {
+      const mockContext = {
+        withinBanner: true,
+      };
+
+      const link = mountWithAppProvider(
+        <Link url="https://examp.le">Some content</Link>,
+        {context: mockContext},
+      ).find(UnstyledLink);
+
+      expect(link.hasClass('monochrome')).toBe(true);
+    });
+
+    it('does not output a monochrome unstyled link if it is not rendered within a banner', () => {
+      const mockContext = {
+        withinBanner: false,
+      };
+
+      const link = mountWithAppProvider(
+        <Link url="https://examp.le">Some content</Link>,
+        {context: mockContext},
+      ).find(UnstyledLink);
+
+      expect(link.hasClass('monochrome')).toBe(false);
+    });
+
+    it('outputs a monochrome button if rendered within a banner', () => {
+      const mockContext = {
+        withinBanner: true,
+      };
+
+      const button = mountWithAppProvider(<Link>Some content</Link>, {
+        context: mockContext,
+      }).find('button');
+
+      expect(button.hasClass('monochrome')).toBe(true);
+    });
+
+    it('does not output a monochrome button if it is not rendered within a banner', () => {
+      const mockContext = {
+        withinBanner: false,
+      };
+
+      const button = mountWithAppProvider(<Link>Some content</Link>, {
+        context: mockContext,
+      }).find('button');
+
+      expect(button.hasClass('monochrome')).toBe(false);
+    });
+  });
 });
