@@ -28,7 +28,7 @@ export interface BaseProps {
 export interface Props extends BaseProps {}
 type CombinedProps = Props & WithAppProviderProps;
 
-function Link(
+export function Link(
   {url, children, onClick, external, id, monochrome, polaris}: CombinedProps,
   context: {withinBanner: boolean},
 ) {
