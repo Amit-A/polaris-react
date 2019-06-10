@@ -44,10 +44,18 @@ export interface Props {
 
 export default class Banner extends React.PureComponent<Props, never> {
   static contextTypes = contentContextTypes;
+  static childContextTypes = contentContextTypes;
+
   private wrapper = React.createRef<HTMLDivElement>();
 
   public focus() {
     this.wrapper.current && this.wrapper.current.focus();
+  }
+
+  getChildContext() {
+    return {
+      withinBanner: true,
+    };
   }
 
   render() {

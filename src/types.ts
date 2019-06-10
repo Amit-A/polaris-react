@@ -237,6 +237,7 @@ export enum Key {
 
 export const contentContextTypes: ValidationMap<any> = {
   withinContentContainer: PropTypes.bool,
+  withinBanner: PropTypes.bool,
 };
 
 export interface WithContextTypes<IJ> {
