@@ -25,6 +25,7 @@ Use [the changelog guidelines](https://git.io/polaris-changelog-guidelines) to f
 - Added `textAlign` prop to Button ([#1576](https://github.com/Shopify/polaris-react/pull/1576))
 - Made `Button` red when given both the `plain` and `destructive` props ([#1603](https://github.com/Shopify/polaris-react/pull/1603))
 - Added support for disabled, destructive, and loading actions in `Card` and `Card.Section` ([#1622](https://github.com/Shopify/polaris-react/1622))
+- Improved color contrast ratio of `Link` components rendered as children of `Banner` components ([#1651](https://github.com/Shopify/polaris-react/pull/1651))
 
 ### Bug fixes
 
