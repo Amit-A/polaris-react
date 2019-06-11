@@ -69,6 +69,17 @@ class Header extends React.PureComponent<ComposedProps, State> {
     {leading: true, trailing: true, maxWait: 40},
   );
 
+  componentDidMount() {
+    const {
+      state: {mobileView},
+      handleToggleMobile,
+    } = this;
+
+    if (mobileView !== isMobileView()) {
+      handleToggleMobile();
+    }
+  }
+
   render() {
     const {
       title,
