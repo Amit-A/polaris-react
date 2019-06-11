@@ -10,10 +10,10 @@ import {
   Menu,
 } from 'components';
 
+import {HeaderPrimaryAction} from '../../../types';
 import {LinkAction} from '../../../../../types';
 
 import Header, {Props} from '../Header';
-import {HeaderPrimaryAction} from '../types';
 
 window.matchMedia =
   window.matchMedia ||
